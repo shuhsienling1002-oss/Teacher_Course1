@@ -245,7 +245,7 @@ def show_quiz_mode():
         st.markdown("**第 2 關：句子接龍**")
         st.markdown("請完成句子：")
         st.markdown("""
-        <div style="background:#fff; padding:15px; border-radius:10px; border-left: 5px solid #FF6B6B; margin: 10px 0;">
+        <div style="background:#fff; color:#000000; padding:15px; border-radius:10px; border-left: 5px solid #FF6B6B; margin: 10px 0;">
             <span style="font-size:20px;">Salongan ko <b>_______</b> no miso.</span>
         </div>
         """, unsafe_allow_html=True)
@@ -318,4 +318,5 @@ with tab1:
 
 with tab2:
     show_quiz_mode()
+
 
