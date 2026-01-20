@@ -65,14 +65,13 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 1. 數據結構 (更新為新內容) ---
+# --- 1. 數據結構 ---
 VOCABULARY = {
     "Salongan": {"zh": "漂亮", "emoji": "✨", "action": "雙手比讚", "file": "Salongan"},
     "Fodoy":    {"zh": "衣服", "emoji": "👕", "action": "拉拉衣服", "file": "Fodoy"},
     "Miso":     {"zh": "你的", "emoji": "🫵", "action": "指指對方", "file": "Miso"}
 }
 
-# 這裡設定句型，file 對應音檔名稱
 SENTENCES = [
     {"amis": "Salongan ko fodoy no miso.", "zh": "你的衣服很漂亮。", "file": "sentence_salongan"}
 ]
@@ -80,18 +79,15 @@ SENTENCES = [
 # --- 1.5 智慧語音核心 ---
 def play_audio(text, filename_base=None):
     if filename_base:
-        # 優先找 m4a
         path_m4a = f"audio/{filename_base}.m4a"
         if os.path.exists(path_m4a):
             st.audio(path_m4a, format='audio/mp4')
             return
-        # 其次找 mp3
         path_mp3 = f"audio/{filename_base}.mp3"
         if os.path.exists(path_mp3):
             st.audio(path_mp3, format='audio/mp3')
             return
 
-    # 降級方案：Google TTS (印尼語口音)
     try:
         tts = gTTS(text=text, lang='id')
         fp = BytesIO()
@@ -152,7 +148,6 @@ def show_quiz_mode():
     st.write("") 
 
     if st.session_state.current_q == 0:
-        # --- Q1: 聽力測驗 ---
         st.markdown("**第 1 關：聽聽看，這是什麼意思？**")
         target_word = "Fodoy"
         play_audio(target_word, filename_base="Fodoy")
@@ -173,7 +168,6 @@ def show_quiz_mode():
             if st.button("🫵 你的"): st.error("那是 Miso 喔！")
 
     elif st.session_state.current_q == 1:
-        # --- Q2: 填空測驗 ---
         st.markdown("**第 2 關：句子接龍**")
         st.markdown("請完成句子：")
         st.markdown("`Salongan ko _______ no miso.`")
@@ -196,7 +190,6 @@ def show_quiz_mode():
                 st.error("再試一次！提示：我們在說衣服喔")
 
     elif st.session_state.current_q == 2:
-        # --- Q3: 意義測驗 ---
         st.markdown("**第 3 關：我是翻譯官**")
         st.markdown("阿美語說： **Salongan!**")
         play_audio("Salongan", filename_base="Salongan")
@@ -213,7 +206,6 @@ def show_quiz_mode():
             st.rerun()
 
     else:
-        # 結算畫面
         st.markdown(f"""
         <div class="card" style="background-color: #FFF8DC; border: 2px solid #FFD700;">
             <h1>🎉 挑戰完成！</h1>
@@ -229,6 +221,14 @@ def show_quiz_mode():
 
 # --- 4. 主程式入口 ---
 st.title("阿美語小教室 🌞")
+
+# 【新增】講師與教材資訊 - 放在標題正下方，置中顯示
+st.markdown("""
+    <div style="text-align: center; color: #555; font-size: 16px; margin-top: -15px; margin-bottom: 25px; font-weight: 500;">
+        講師：彭三妹 &nbsp;|&nbsp; 教材提供者：彭三妹
+    </div>
+    """, unsafe_allow_html=True)
+
 tab1, tab2 = st.tabs(["📖 學習單詞", "🎮 練習挑戰"])
 
 with tab1:
