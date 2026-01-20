@@ -65,7 +65,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 1. 數據結構 (維持原案) ---
+# --- 1. 數據結構 ---
 VOCABULARY = {
     "Salongan": {"zh": "漂亮", "emoji": "✨", "action": "雙手比讚", "file": "Salongan"},
     "Fodoy":    {"zh": "衣服", "emoji": "👕", "action": "拉拉衣服", "file": "Fodoy"},
@@ -106,8 +106,14 @@ if 'current_q' not in st.session_state:
 # --- 3. 介面邏輯 ---
 
 def show_learning_mode():
-    # 【修改】這裡使用了新的阿美語單元主題名稱
-    st.markdown("<div style='text-align: center; color: #888; margin-bottom: 10px;'>Unit 1: Salongan a Fodoy (漂亮的衣服)</div>", unsafe_allow_html=True)
+    # 【修改】字體放大 (24px)，加粗，並使用主題藍色
+    st.markdown("""
+        <div style='text-align: center; color: #2E86C1; font-size: 24px; font-weight: bold; margin-bottom: 15px;'>
+            Unit 1: Salongan a Fodoy<br>
+            <span style='font-size: 20px; color: #555;'>(漂亮的衣服)</span>
+        </div>
+        """, unsafe_allow_html=True)
+    
     st.info("👆 點擊播放按鈕聽發音！")
     
     col1, col2 = st.columns(2)
@@ -149,7 +155,7 @@ def show_quiz_mode():
     st.write("") 
 
     if st.session_state.current_q == 0:
-        # Q1: 聽力 - Fodoy
+        # Q1
         st.markdown("**第 1 關：聽聽看，這是什麼意思？**")
         target_word = "Fodoy"
         play_audio(target_word, filename_base="Fodoy")
@@ -170,7 +176,7 @@ def show_quiz_mode():
             if st.button("🫵 你的"): st.error("那是 Miso 喔！")
 
     elif st.session_state.current_q == 1:
-        # Q2: 填空 - Fodoy
+        # Q2
         st.markdown("**第 2 關：句子接龍**")
         st.markdown("請完成句子：")
         st.markdown("`Salongan ko _______ no miso.`")
@@ -193,7 +199,7 @@ def show_quiz_mode():
                 st.error("再試一次！提示：我們在說衣服喔")
 
     elif st.session_state.current_q == 2:
-        # Q3: 意義 - Salongan
+        # Q3
         st.markdown("**第 3 關：我是翻譯官**")
         st.markdown("阿美語說： **Salongan!**")
         play_audio("Salongan", filename_base="Salongan")
