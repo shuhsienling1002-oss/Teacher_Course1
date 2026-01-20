@@ -172,7 +172,7 @@ def show_learning_mode():
     # 標題設計：使用深藍綠色 (Teal) 來對比紅色的主標題，顯得優雅
     st.markdown("""
         <div style='text-align: center; margin-bottom: 25px;'>
-            <h2 style='color: #2A9D8F; font-size: 28px; margin: 0;'>Unit 1: Salongan a Fodoy</h2>
+            <h2 style='color: #2A9D8F; font-size: 28px; margin: 0;'>Salongan a Fodoy</h2>
             <div style='color: #A0A0A0; font-size: 18px; font-weight: 400; letter-spacing: 2px; margin-top: 5px;'>
                 — 漂亮的衣服 —
             </div>
@@ -318,3 +318,4 @@ with tab1:
 
 with tab2:
     show_quiz_mode()
+
