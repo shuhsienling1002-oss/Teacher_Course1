@@ -4,7 +4,7 @@ import os
 from gtts import gTTS
 from io import BytesIO
 
-# --- 0. 系統配置 (行動優先設定) ---
+# --- 0. 系統配置 ---
 st.set_page_config(
     page_title="阿美語小教室", 
     page_icon="🌞", 
@@ -12,7 +12,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CSS 優化 (手機版面特化) ---
+# --- CSS 優化 ---
 st.markdown("""
     <style>
     .block-container {
@@ -65,15 +65,15 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- 1. 數據結構 ---
+# --- 1. 數據結構 (Unit 2: 飲食篇) ---
 VOCABULARY = {
-    "Salongan": {"zh": "漂亮", "emoji": "✨", "action": "雙手比讚", "file": "Salongan"},
-    "Fodoy":    {"zh": "衣服", "emoji": "👕", "action": "拉拉衣服", "file": "Fodoy"},
-    "Miso":     {"zh": "你的", "emoji": "🫵", "action": "指指對方", "file": "Miso"}
+    "Komaen": {"zh": "吃", "emoji": "🍽️", "action": "做出吃飯動作", "file": "Komaen"},
+    "Hemay":  {"zh": "飯", "emoji": "🍚", "action": "像是捧著碗", "file": "Hemay"},
+    "Nanom":  {"zh": "水", "emoji": "💧", "action": "做出喝水動作", "file": "Nanom"}
 }
 
 SENTENCES = [
-    {"amis": "Salongan ko fodoy no miso.", "zh": "你的衣服很漂亮。", "file": "sentence_salongan"}
+    {"amis": "Komaen kako to hemay.", "zh": "我正在吃飯。", "file": "sentence_komaen"}
 ]
 
 # --- 1.5 智慧語音核心 ---
@@ -89,7 +89,7 @@ def play_audio(text, filename_base=None):
             return
 
     try:
-        tts = gTTS(text=text, lang='id')
+        tts = gTTS(text=text, lang='id') # 印尼語發音近似阿美語
         fp = BytesIO()
         tts.write_to_fp(fp)
         fp.seek(0)
@@ -106,7 +106,7 @@ if 'current_q' not in st.session_state:
 # --- 3. 介面邏輯 ---
 
 def show_learning_mode():
-    st.markdown("<div style='text-align: center; color: #888; margin-bottom: 10px;'>Unit 1: 讚美與衣物</div>", unsafe_allow_html=True)
+    st.markdown("<div style='text-align: center; color: #888; margin-bottom: 10px;'>Unit 2: 飲食與生活</div>", unsafe_allow_html=True)
     st.info("👆 點擊播放按鈕聽發音！")
     
     col1, col2 = st.columns(2)
@@ -148,69 +148,73 @@ def show_quiz_mode():
     st.write("") 
 
     if st.session_state.current_q == 0:
+        # --- Q1: 聽力測驗 ---
         st.markdown("**第 1 關：聽聽看，這是什麼意思？**")
-        target_word = "Fodoy"
-        play_audio(target_word, filename_base="Fodoy")
+        target_word = "Nanom"
+        play_audio(target_word, filename_base="Nanom")
         
         st.write("")
         c1, c2, c3 = st.columns(3)
         with c1:
-            if st.button("✨ 漂亮"): st.error("那是 Salongan 喔！")
+            if st.button("🍽️ 吃"): st.error("那是 Komaen 喔！")
         with c2:
-            if st.button("👕 衣服"):
+            if st.button("🍚 飯"): st.error("那是 Hemay 喔！")
+        with c3:
+            if st.button("💧 水"):
                 st.balloons()
-                st.success("答對了！")
+                st.success("答對了！Nanom 就是水。")
                 time.sleep(1.0)
                 st.session_state.score += 100
                 st.session_state.current_q += 1
                 st.rerun()
-        with c3:
-            if st.button("🫵 你的"): st.error("那是 Miso 喔！")
 
     elif st.session_state.current_q == 1:
+        # --- Q2: 填空測驗 ---
         st.markdown("**第 2 關：句子接龍**")
         st.markdown("請完成句子：")
-        st.markdown("`Salongan ko _______ no miso.`")
-        st.caption("(你的衣服很漂亮)")
+        st.markdown("`Komaen kako to _______.`")
+        st.caption("(我正在吃飯)")
         
-        play_audio("Salongan ko fodoy no miso", filename_base="sentence_salongan")
+        play_audio("Komaen kako to hemay", filename_base="sentence_komaen")
         
-        options = ["Fodoy (衣服)", "Mata (眼睛)", "Fongoh (頭)"]
+        options = ["Hemay (飯)", "Nanom (水)", "Fodoy (衣服)"]
         choice = st.radio("請選擇正確的單字：", options)
         
         st.write("")
         if st.button("✅ 確定送出"):
-            if "Fodoy" in choice:
+            if "Hemay" in choice:
                 st.success("太棒了！")
                 time.sleep(1.5)
                 st.session_state.score += 100
                 st.session_state.current_q += 1
                 st.rerun()
             else:
-                st.error("再試一次！提示：我們在說衣服喔")
+                st.error("再試一次！Komaen 是吃，所以要選吃的東西喔。")
 
     elif st.session_state.current_q == 2:
+        # --- Q3: 意義測驗 ---
         st.markdown("**第 3 關：我是翻譯官**")
-        st.markdown("阿美語說： **Salongan!**")
-        play_audio("Salongan", filename_base="Salongan")
+        st.markdown("阿美語說： **Komaen!**")
+        play_audio("Komaen", filename_base="Komaen")
         
-        st.info("這是在稱讚什麼？")
+        st.info("這個動作是在做什麼？")
         
-        if st.button("不好看..."): st.error("不對喔！")
-        if st.button("很漂亮！"):
+        if st.button("喝水"): st.error("喝水是 Minom (或喝 Nanom) 喔！")
+        if st.button("吃飯"):
             st.snow()
-            st.success("完全正確！")
+            st.success("完全正確！Komaen 就是吃。")
             time.sleep(1.5)
             st.session_state.score += 100
             st.session_state.current_q += 1
             st.rerun()
 
     else:
+        # 結算畫面
         st.markdown(f"""
         <div class="card" style="background-color: #FFF8DC; border: 2px solid #FFD700;">
             <h1>🎉 挑戰完成！</h1>
             <h2 style="color: #E67E22;">得分：{st.session_state.score}</h2>
-            <p>Salongan ko fodoy no miso! ✨</p>
+            <p>Komaen kako to hemay! 🍚</p>
         </div>
         """, unsafe_allow_html=True)
         
@@ -222,7 +226,7 @@ def show_quiz_mode():
 # --- 4. 主程式入口 ---
 st.title("阿美語小教室 🌞")
 
-# 【新增】講師與教材資訊 - 放在標題正下方，置中顯示
+# 講師資訊
 st.markdown("""
     <div style="text-align: center; color: #555; font-size: 16px; margin-top: -15px; margin-bottom: 25px; font-weight: 500;">
         講師：彭三妹 &nbsp;|&nbsp; 教材提供者：彭三妹
